@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="index.js" defer></script>
+    <title>Range-animation</title>
+  </head>
+  <body>
+    <div class="range" style="--value: 0">
+      <div class="range__track"></div>
+      <div class="range__progress"></div>
+      <div class="range__thumbs">
+        <input
+          class="range__input"
+          id="tailmetr"
+          type="range"
+          min="0"
+          max="100"
+          value="0"
+          step="10"
+        />
+        <!-- Текущее значение слайдера -->
+        <output class="range__output" id="output" > 
+          <div class="range__bubbles"> min</div>
+        </output>
+      </div>
+    </div>
+  </body>
+</html>

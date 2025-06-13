@@ -1,0 +1,261 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: rgb(46, 46, 56);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*  */
+.range {
+  --value: 80;
+  --min: 0;
+  --max: 100;
+  --step: 10;
+  --track-width: 320px;
+  --track-height: 10px;
+  --thumb-size: 14px;
+  --track-radius: 6px;
+  --progress-color: #5977ff;
+  --progress-glow: 0 0 12px #6783ff;
+  --track-bg: linear-gradient(
+    180deg,
+    rgba(140, 140, 150, 0.25) 0%,
+    rgba(100, 100, 110, 0.3) 100%
+  );
+  --white: #fff;
+  position: relative;
+  width: var(--track-width);
+  padding: 32px 0 0 0;
+  user-select: none;
+}
+
+.range__track,
+.range__progress {
+  position: absolute;
+  border-radius: var(--track-radius);
+  left: 0;
+  top: 50%;
+  height: var(--track-height);
+  transform: translateY(-50%);
+  width: var(--track-width);
+  pointer-events: none;
+}
+
+.range__track {
+  background: var(--track-bg);
+  width: 100%;
+  opacity: 0.7;
+  z-index: 1;
+}
+
+.range__progress {
+  background: var(--progress-color);
+  box-shadow: 0 0 0 transparent;
+  transition: background 0.2s, box-shadow 0.2s;
+  z-index: 2;
+  width: 0;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.range__thumbs {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 100%;
+}
+
+/* Скрываем стандартный input */
+.range__input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: transparent;
+  position: relative;
+  height: var(--thumb-size);
+  outline: none;
+  z-index: 15;
+  cursor: pointer;
+}
+
+/* Track для Chrome */
+.range__input::-webkit-slider-runnable-track {
+  height: var(--track-height);
+  background: transparent;
+}
+/* Track для Firefox */
+.range__input::-moz-range-track {
+  height: var(--track-height);
+  background: transparent;
+}
+/* Track для IE */
+.range__input::-ms-fill-lower,
+.range__input::-ms-fill-upper {
+  background: transparent;
+  height: var(--track-height);
+}
+
+/* Thumb — круглый, цвет зависит от значения */
+.range__input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+  border-radius: 50%;
+  background: var(--progress-color);
+  transition: box-shadow 0.2s, background 0.2s, transform 0.15s;
+  position: relative;
+  z-index: 10;
+}
+.range__input:focus::-webkit-slider-thumb,
+.range__input:active::-webkit-slider-thumb {
+  outline: none;
+  transform: scale(1.15);
+}
+
+/* Firefox */
+.range__input::-moz-range-thumb {
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+  border-radius: 50%;
+  background: var(--white);
+  border: 2px solid #d2d2f4;
+  box-shadow: 0 2px 10px 0 #0002;
+  transition: box-shadow 0.2s, background 0.2s, transform 0.15s;
+  position: relative;
+  z-index: 10;
+}
+.range__input:focus::-moz-range-thumb,
+.range__input:active::-moz-range-thumb {
+  outline: none;
+  transform: scale(1.15);
+  box-shadow: 0 0 0 8px #a259ff44, 0 2px 10px 0 #0002;
+}
+
+/* IE */
+.range__input::-ms-thumb {
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+  border-radius: 50%;
+  background: var(--white);
+  border: 2px solid #d2d2f4;
+  box-shadow: 0 2px 10px 0 #0002;
+  transition: box-shadow 0.2s, background 0.2s, transform 0.15s;
+  position: relative;
+  z-index: 10;
+}
+.range__input:focus::-ms-thumb,
+.range__input:active::-ms-thumb {
+  outline: none;
+  transform: scale(1.15);
+  box-shadow: 0 0 0 8px #a259ff44, 0 2px 10px 0 #0002;
+}
+
+/* Убираем focus outline */
+.range__input:focus {
+  outline: none;
+}
+
+/* Скрыть лишние дефолтные стили IE/Edge */
+.range__input::-ms-tooltip {
+  display: none;
+}
+
+/* Ползунок и прогресс - фиолетовый при увеличении, белый при уменьшении */
+.range.increase .range__progress,
+.range.increase .range__input::-webkit-slider-thumb,
+.range.increase .range__input::-moz-range-thumb,
+.range.increase .range__input::-ms-thumb {
+  background: var(--progress-color) !important;
+  box-shadow: var(--progress-glow), 0 2px 10px 0 #0002 !important;
+  border-color: #a259ff !important;
+}
+.range.decrease .range__progress,
+.range.decrease .range__input::-webkit-slider-thumb,
+.range.decrease .range__input::-moz-range-thumb,
+.range.decrease .range__input::-ms-thumb {
+  background: var(--white) !important;
+  box-shadow: 0 2px 10px 0 #0002 !important;
+  border-color: #d2d2f4 !important;
+}
+
+/* output над thumb */
+.range__output {
+  --output-size: 80px;
+  position: absolute;
+  top: -650% ;
+  left: 0;
+  z-index: 20;
+  min-width: var(--output-size);
+  height: calc(var(--output-size) + (var(--output-size) / 2)) ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+  font-family: inherit;
+  pointer-events: none;
+  opacity: 0.92;
+  font-weight: 600;
+  transition: background 0.2s;
+  transform: translateX(-50%);
+  border: 1px solid #a259ff33;
+}
+
+
+/* Кружки-анимации */
+.range__bubbles {
+
+}
+.bubble {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #a259ff;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  opacity: 0.92;
+  pointer-events: none;
+  box-shadow: 0 0 16px #a259ff44;
+  will-change: transform, opacity;
+  animation: spiral-bubble 1.1s cubic-bezier(0.5, 0, 0.7, 1);
+}
+/* Спиральная анимация */
+@keyframes spiral-bubble {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.7) translate(0, 0) rotate(0deg);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.15) translate(-12px, -40px) rotate(-20deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.03) translate(22px, -60px) rotate(25deg);
+  }
+  80% {
+    opacity: 0.8;
+    transform: scale(0.85) translate(28px, -85px) rotate(40deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.6) translate(38px, -110px) rotate(60deg);
+  }
+}
