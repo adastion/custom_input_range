@@ -5,7 +5,7 @@ function setProgress(range, value) {
   const percent = (value - min) / (max - min);
 
   // Обновляем кастомную прогресс-полосу
-  const progress = range.parentElement.previousElementSibling;
+  const progress = document.querySelector(".range__progress");
   progress.style.width = `${percent * 100}%`;
 
   // Обновляем кастомные переменные
@@ -18,33 +18,33 @@ function setOutputPosition(range, output) {
   const val = +range.value;
   const percent = (val - min) / (max - min);
   const thumbSize = 14;
-  const trackWidth = 320;
+  const trackWidth = 420;
   const shift = thumbSize / 2;
   const pos = percent * (trackWidth - thumbSize) + shift;
   output.style.left = `${pos}px`;
 }
 
-function showBubble(container, value, direction, step) {
-  // direction: 'increase' | 'decrease'
-  const bubble = document.createElement("div");
-  bubble.className = "bubble";
-  bubble.textContent = step;
-  // bubble расположить над thumb
-  bubble.style.left = "calc(var(--bubble-x))";
-  bubble.style.top = "calc(var(--bubble-y))";
-  if (direction === "increase") bubble.style.background = "#a259ff";
-  else bubble.style.background = "#fff";
-  container.appendChild(bubble);
-  setTimeout(() => {
-    bubble.remove();
-  }, 1100);
-}
+// function showBubble(container, value, direction, step) {
+//   // direction: 'increase' | 'decrease'
+//   const bubble = document.createElement("div");
+//   bubble.className = "bubble";
+//   bubble.textContent = step;
+//   // bubble расположить над thumb
+//   bubble.style.left = "calc(var(--bubble-x))";
+//   bubble.style.top = "calc(var(--bubble-y))";
+//   if (direction === "increase") bubble.style.background = "#a259ff";
+//   else bubble.style.background = "#fff";
+//   container.appendChild(bubble);
+//   setTimeout(() => {
+//     bubble.remove();
+//   }, 1100);
+// }
 
-// Основная логика
+// // Основная логика
 document.addEventListener("DOMContentLoaded", () => {
   const range = document.querySelector(".range__input");
   const output = document.getElementById("output");
-  const progress = document.querySelector(".range__progress");
+
   const rangeBox = document.querySelector(".range");
   const bubbles = document.querySelector(".range__bubbles");
   let prevValue = +range.value;
@@ -54,16 +54,16 @@ document.addEventListener("DOMContentLoaded", () => {
   setOutputPosition(range, output);
 
   range.addEventListener("input", (e) => {
-    const val = +range.value;
+    const val = e.currentTarget.value;
     setProgress(range, val);
-    output.value = val;
-    output.textContent = val;
+    // output.value = val;
+    // output.textContent = val;
 
     // Определяем увеличение/уменьшение
-    if (val > prevValue) {
+    if (val >= prevValue) {
       rangeBox.classList.add("increase");
       rangeBox.classList.remove("decrease");
-    } else if (val < prevValue) {
+    } else if (val <= prevValue) {
       rangeBox.classList.add("decrease");
       rangeBox.classList.remove("increase");
     }
@@ -71,19 +71,19 @@ document.addEventListener("DOMContentLoaded", () => {
     setOutputPosition(range, output);
 
     // Кружки-спирали
-    const step = 10;
+    const step = 26;
     if (val !== prevValue) {
       // появится столько кружков, сколько шагов между prevValue и val
       const diff = Math.abs(val - prevValue);
       const count = Math.floor(diff / step) || 1;
-      const direction = val > prevValue ? "increase" : "decrease";
+      const direction = val >= prevValue ? "increase" : "decrease";
 
       // Определяем положение thumb (анимируем над ним)
-      const min = +range.min,
-        max = +range.max;
+      const min = +range.min;
+      const max = +range.max;
       const percent = (val - min) / (max - min);
-      const thumbSize = 32;
-      const trackWidth = 320;
+      const thumbSize = 14;
+      const trackWidth = 60;
       const shift = thumbSize / 2;
       const pos = percent * (trackWidth - thumbSize) + shift;
 
@@ -93,14 +93,14 @@ document.addEventListener("DOMContentLoaded", () => {
         // left позиция
         let left = pos + offset - 13; // центрируем
         // top чуть выше thumb
-        let top = 32 - 13;
+        let top = 36 - 13;
         const bubble = document.createElement("div");
         bubble.className = "bubble";
-        bubble.textContent = step;
+        bubble.textContent = val;
         bubble.style.left = `${left}px`;
         bubble.style.top = `${top}px`;
-        bubble.style.background = direction === "increase" ? "#a259ff" : "#fff";
-        bubble.style.color = direction === "increase" ? "#fff" : "#a259ff";
+        bubble.style.background = direction === "increase" ? "#5977ff" : "#fff";
+        bubble.style.color = direction === "increase" ? "#fff" : "#5977ff";
         bubbles.appendChild(bubble);
         setTimeout(() => {
           bubble.remove();
